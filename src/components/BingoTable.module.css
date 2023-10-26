@@ -1,0 +1,17 @@
+.grid {
+    --grid-card-size: 10rem;
+
+    width: fit-content;
+
+    .card {
+        display: grid;
+        place-content: center;
+        text-align: center;
+        font-size: 18px;
+        width: var(--grid-card-size);
+        height: var(--grid-card-size);
+        border: 1px solid var(--mantine-color-gray-3);
+        background-color: white;
+        padding: 8px;
+    }
+}
