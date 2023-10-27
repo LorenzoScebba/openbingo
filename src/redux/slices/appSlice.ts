@@ -1,15 +1,23 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { uniq } from "lodash";
+
+type GenericAsyncThunk = AsyncThunk<unknown, unknown, never>;
+type FulfilledAction = ReturnType<GenericAsyncThunk["fulfilled"]>;
 
 export interface IAppState {
   size: number;
   textareaContent: string;
   seed: number;
+  highlightedItems: number[];
 }
 
 const initialState: IAppState = {
   size: 3,
   textareaContent: localStorage.getItem("textareaContent") || "",
-  seed: 0,
+  seed: Number(localStorage.getItem("seed") || 0),
+  highlightedItems: JSON.parse(
+    localStorage.getItem("highlightedItems") || "[]",
+  ),
 };
 
 export const appSlice = createSlice({
@@ -24,9 +32,44 @@ export const appSlice = createSlice({
       localStorage.setItem("textareaContent", action.payload);
     },
     randomizeSeed: (state) => {
-      state.seed = Math.floor(Math.random() * 1000);
+      const seed = Math.floor(Math.random() * 1000);
+      state.seed = seed;
+      state.highlightedItems = [];
+      localStorage.setItem("seed", seed.toString());
     },
+    addHighlightedItem: (state, action: PayloadAction<number>) => {
+      state.highlightedItems = uniq([
+        ...state.highlightedItems,
+        action.payload,
+      ]);
+    },
+    removeHighlightedItem: (state, action: PayloadAction<number>) => {
+      state.highlightedItems = state.highlightedItems.filter(
+        (item) => item !== action.payload,
+      );
+    },
+    clearHighlightedItems: (state) => {
+      state.highlightedItems = [];
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addMatcher<FulfilledAction>(
+      () => true,
+      (state) => {
+        localStorage.setItem(
+          "highlightedItems",
+          JSON.stringify(state.highlightedItems),
+        );
+      },
+    );
   },
 });
 
-export const { setSize, setTextareaContent, randomizeSeed } = appSlice.actions;
+export const {
+  setSize,
+  setTextareaContent,
+  randomizeSeed,
+  clearHighlightedItems,
+  removeHighlightedItem,
+  addHighlightedItem,
+} = appSlice.actions;

@@ -1,6 +1,10 @@
 import { Button, Flex, Group, NumberInput } from "@mantine/core";
 import { useAppDispatch, useAppSelector } from "./redux/hooks.ts";
-import { randomizeSeed, setSize } from "./redux/slices/appSlice.ts";
+import {
+  clearHighlightedItems,
+  randomizeSeed,
+  setSize,
+} from "./redux/slices/appSlice.ts";
 import BingoTable from "./components/BingoTable.tsx";
 import BingoTextAreaInput from "./components/BingoTextAreaInput.tsx";
 import { toPng } from "html-to-image";
@@ -26,7 +30,9 @@ const MainContent = () => {
           min={3}
           max={10}
         />
-        <Button onClick={() => dispatch(randomizeSeed())}>Randomize!</Button>
+        <Button color={"purple"} onClick={() => dispatch(randomizeSeed())}>
+          Randomize!
+        </Button>
         <Button
           onClick={() => {
             toPng(document.getElementById("bingo") as HTMLElement).then(
@@ -37,6 +43,14 @@ const MainContent = () => {
           }}
         >
           Save as Png
+        </Button>
+        <Button
+          color={"red"}
+          onClick={() => {
+            dispatch(clearHighlightedItems());
+          }}
+        >
+          Reset progress
         </Button>
       </Group>
       <Flex mt={16} gap={16}>
