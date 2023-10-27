@@ -29,13 +29,13 @@ export const appSlice = createSlice({
     },
     setTextareaContent: (state, action: PayloadAction<string>) => {
       state.textareaContent = action.payload;
-      localStorage.setItem("textareaContent", action.payload);
+    },
+    setSeed: (state, action: PayloadAction<number>) => {
+      state.seed = action.payload;
     },
     randomizeSeed: (state) => {
-      const seed = Math.floor(Math.random() * 1000);
-      state.seed = seed;
+      state.seed = Math.floor(Math.random() * 1000);
       state.highlightedItems = [];
-      localStorage.setItem("seed", seed.toString());
     },
     addHighlightedItem: (state, action: PayloadAction<number>) => {
       state.highlightedItems = uniq([
@@ -56,6 +56,8 @@ export const appSlice = createSlice({
     builder.addMatcher<FulfilledAction>(
       () => true,
       (state) => {
+        localStorage.setItem("textareaContent", state.textareaContent);
+        localStorage.setItem("seed", state.seed.toString());
         localStorage.setItem(
           "highlightedItems",
           JSON.stringify(state.highlightedItems),
@@ -72,4 +74,5 @@ export const {
   clearHighlightedItems,
   removeHighlightedItem,
   addHighlightedItem,
+  setSeed,
 } = appSlice.actions;
