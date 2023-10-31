@@ -1,5 +1,6 @@
 import { AsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { uniq } from "lodash";
+import { Chance } from "chance";
 
 type GenericAsyncThunk = AsyncThunk<unknown, unknown, never>;
 type FulfilledAction = ReturnType<GenericAsyncThunk["fulfilled"]>;
@@ -12,7 +13,7 @@ export interface IAppState {
 }
 
 const initialState: IAppState = {
-  size: 3,
+  size: Number(localStorage.getItem("size") || 3),
   textareaContent: localStorage.getItem("textareaContent") || "",
   seed: Number(localStorage.getItem("seed") || 0),
   highlightedItems: JSON.parse(
@@ -34,7 +35,7 @@ export const appSlice = createSlice({
       state.seed = action.payload;
     },
     randomizeSeed: (state) => {
-      state.seed = Math.floor(Math.random() * 1000);
+      state.seed = new Chance().integer();
       state.highlightedItems = [];
     },
     addHighlightedItem: (state, action: PayloadAction<number>) => {
@@ -56,6 +57,7 @@ export const appSlice = createSlice({
     builder.addMatcher<FulfilledAction>(
       () => true,
       (state) => {
+        localStorage.setItem("size", state.size.toString());
         localStorage.setItem("textareaContent", state.textareaContent);
         localStorage.setItem("seed", state.seed.toString());
         localStorage.setItem(
