@@ -19,6 +19,7 @@ import BingoTextAreaInput from "./components/BingoTextAreaInput.tsx";
 import { toPng } from "html-to-image";
 import FileSaver from "file-saver";
 import { useDisclosure } from "@mantine/hooks";
+import classes from "./MainContent.module.css";
 
 const MainContent = () => {
   const dispatch = useAppDispatch();
@@ -94,7 +95,7 @@ const MainContent = () => {
         </Button>
         <Button onClick={toggle}>Import</Button>
       </Group>
-      <Flex mt={16} gap={16}>
+      <Flex mt={16} gap={16} className={classes.flex}>
         <BingoTable />
         <BingoTextAreaInput />
       </Flex>

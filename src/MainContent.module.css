@@ -1,0 +1,7 @@
+.flex {
+    flex-direction: row;
+
+    @media (max-width: rem(1023px)) {
+        flex-direction: column;
+    }
+}

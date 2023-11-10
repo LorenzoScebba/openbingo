@@ -5,8 +5,16 @@
 
 .wrapper {
     height: 100%;
+
+    @media (max-width: rem(1023px)) {
+        height: rem(256px);
+    }
 }
 
 .input {
     height: 100%;
+
+    @media (max-width: rem(1023px)) {
+        height: rem(256px);
+    }
 }

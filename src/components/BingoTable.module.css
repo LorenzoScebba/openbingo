@@ -1,7 +1,10 @@
 .grid {
     --grid-card-size: 10rem;
-
     width: fit-content;
+
+    @media (max-width: rem(1023px)) {
+        --grid-card-size: auto;
+    }
 
     .card {
         display: grid;
@@ -10,8 +13,10 @@
         font-size: 18px;
         width: var(--grid-card-size);
         height: var(--grid-card-size);
+        min-height: 6rem;
         border: 1px solid var(--mantine-color-gray-3);
         background-color: white;
         padding: 8px;
+        overflow: hidden;
     }
 }
